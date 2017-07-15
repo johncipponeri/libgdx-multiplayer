@@ -51,7 +51,20 @@ public class GameServer extends ApplicationAdapter {
 		System.out.println("Server started!");
 	}
 	
+	public static void printIntro() {
+		String asciiLogo = String.join("\n"
+				, "\\ \\/ /___ _ __   ___   / _\\ ___ _ ____   _____ _ __"
+				, " \\  // _ \\ '_ \\ / _ \\  \\ \\ / _ \\ '__\\ \\ / / _ \\ '__|"
+				, " /  \\  __/ | | | (_) | _\\ \\  __/ |   \\ V /  __/ |"
+				, "/_/\\_\\___|_| |_|\\___/  \\__/\\___|_|    \\_/ \\___|_|"
+        );
+		
+		System.out.println(asciiLogo + "\n");
+	}
+	
 	public static void main(String[] args) {
+		printIntro();
+		
 		try {
 			GameServer server = new GameServer();
 			
