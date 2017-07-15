@@ -5,6 +5,10 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.xeno.game.MainGame;
 import com.xeno.game.network.client.GameClient;
 
@@ -14,6 +18,9 @@ public class GameScreen extends ScreenAdapter {
 	private MainGame game;
 	
 	public OrthographicCamera camera;
+	
+	private TiledMap map;
+	private TiledMapRenderer mapRenderer;
 	
 	private SpriteBatch batch;
 	
@@ -25,6 +32,9 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
         
 		batch = new SpriteBatch();
+		
+		map = new TmxMapLoader().load("map.tmx");
+		mapRenderer = new OrthogonalTiledMapRenderer(map, batch);
 		
 		try {
 			client = new GameClient(this);
@@ -41,12 +51,17 @@ public class GameScreen extends ScreenAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		camera.update();
+		
+		mapRenderer.setView(camera);
+		mapRenderer.render();
 	}
 	
 	@Override
 	public void dispose() {
 		client = null;
 		camera = null;
+		map.dispose();
+		mapRenderer = null;
 		batch.dispose();
 		
 		super.dispose();
