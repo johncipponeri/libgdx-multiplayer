@@ -15,6 +15,11 @@ public class Assets {
 		return;
 	}
 	
+	public static void load() {
+		if (loaded)
+			return;
+	}
+	
 	public static Texture loadTexture(String filename) {
         return new Texture(Gdx.files.internal(filename));
 	}
