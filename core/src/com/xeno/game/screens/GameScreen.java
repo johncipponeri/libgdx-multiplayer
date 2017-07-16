@@ -12,6 +12,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
+import com.xeno.game.GameMap;
 import com.xeno.game.MainGame;
 import com.xeno.game.common.Player;
 import com.xeno.game.network.client.GameClient;
@@ -26,8 +28,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	public OrthographicCamera camera;
 	
-	private TiledMap map;
-	private TiledMapRenderer mapRenderer;
+	private GameMap map;
 	
 	private SpriteBatch batch;
 	
@@ -40,8 +41,7 @@ public class GameScreen extends ScreenAdapter {
         
 		batch = new SpriteBatch();
 		
-		map = new TmxMapLoader().load("map.tmx");
-		mapRenderer = new OrthogonalTiledMapRenderer(map, batch);
+		map = new GameMap("map.tmx", batch);
 		
 		players = new CopyOnWriteArrayList<Player>();
 		player = new Player(5 * 32, 5 * 32);
@@ -64,6 +64,13 @@ public class GameScreen extends ScreenAdapter {
 			player.setY((int) (player.getY() - 300 * delta));
 		
 		camera.position.set(player.getX(), player.getY(), 0);
+		
+		float cameraHalfWidth = camera.viewportWidth / 2;
+		float cameraHalfHeight = camera.viewportHeight / 2;
+		
+		camera.position.x = MathUtils.clamp(camera.position.x, cameraHalfWidth, map.getWidth() - cameraHalfWidth);
+		camera.position.y = MathUtils.clamp(camera.position.y, cameraHalfHeight, map.getHeight() - cameraHalfHeight);
+		
 		camera.update();
 	}
 	
@@ -76,8 +83,7 @@ public class GameScreen extends ScreenAdapter {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		mapRenderer.setView(camera);
-		mapRenderer.render();
+		map.draw(camera);
 		
 		batch.begin();
 		
@@ -89,9 +95,10 @@ public class GameScreen extends ScreenAdapter {
 	@Override
 	public void dispose() {
 		client = null;
+		players.clear();
+		players = null;
 		camera = null;
 		map.dispose();
-		mapRenderer = null;
 		batch.dispose();
 		
 		super.dispose();
