@@ -3,15 +3,11 @@ package com.xeno.game.screens;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.xeno.game.GameMap;
 import com.xeno.game.MainGame;
@@ -24,7 +20,7 @@ public class GameScreen extends ScreenAdapter {
 	private MainGame game;
 	
 	public CopyOnWriteArrayList<Player> players;
-	private Player player;
+	public Player player;
 	
 	public OrthographicCamera camera;
 	
@@ -44,7 +40,6 @@ public class GameScreen extends ScreenAdapter {
 		map = new GameMap("map.tmx", batch);
 		
 		players = new CopyOnWriteArrayList<Player>();
-		player = new Player(5 * 32, 5 * 32);
 		
 		try {
 			client = new GameClient(this);
@@ -65,6 +60,7 @@ public class GameScreen extends ScreenAdapter {
 		
 		camera.position.set(player.getX(), player.getY(), 0);
 		
+		// Calculate once
 		float cameraHalfWidth = camera.viewportWidth / 2;
 		float cameraHalfHeight = camera.viewportHeight / 2;
 		
@@ -76,9 +72,11 @@ public class GameScreen extends ScreenAdapter {
 	
 	@Override
 	public void render(float delta) {
-		update(delta);
-		
 		super.render(delta);
+
+		if (player == null) return;
+		
+		update(delta);
 		
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -87,7 +85,8 @@ public class GameScreen extends ScreenAdapter {
 		
 		batch.begin();
 		
-		player.draw(batch);
+		for (Player p : players)
+			p.draw(batch);
 		
 		batch.end();
 	}
