@@ -1,6 +1,9 @@
 package com.xeno.game.common;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -11,10 +14,12 @@ public class Player {
 
 	public Vector2 position;
 	private Rectangle bounds;
+	private int id;
 	
-	public Player(int x, int y) {
-		this.position = new Vector2(x, y);
+	public Player(int x, int y, int id) {
+		this.id = id;
 		
+		position = new Vector2(x, y);
 		bounds = new Rectangle(position.x, position.y, 32, 32);
 	}
 	
@@ -32,6 +37,32 @@ public class Player {
 			renderer.rect(position.x, position.y, bounds.width, bounds.height);
 			renderer.end();
 		}
+	}
+	
+	public static Player getPlayerById(int id, ArrayList<Player> players) {
+		Iterator<Player> iter = players.iterator();
+
+		while (iter.hasNext()) {
+		    Player p = iter.next();
+
+		    if (p.getId() == id)
+				return p;
+		}
+		
+		return null;
+	}
+	
+	public static Player getPlayerById(int id, CopyOnWriteArrayList<Player> players) {
+		Iterator<Player> iter = players.iterator();
+
+		while (iter.hasNext()) {
+		    Player p = iter.next();
+
+		    if (p.getId() == id)
+				return p;
+		}
+		
+		return null;
 	}
 	
 	public void setPosition(int x, int y) {
@@ -52,5 +83,13 @@ public class Player {
 
 	public void setY(int y) {
 		this.position.y = y;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 }
