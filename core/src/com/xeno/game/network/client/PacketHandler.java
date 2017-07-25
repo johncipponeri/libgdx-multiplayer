@@ -2,6 +2,8 @@ package com.xeno.game.network.client;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.xeno.game.MainGame;
+import com.xeno.game.common.Player;
 import com.xeno.game.network.common.Packets;
 
 public class PacketHandler extends Listener {
@@ -16,16 +18,38 @@ public class PacketHandler extends Listener {
 	public void received(Connection c, Object o) {
 		super.received(c, o);
 		
-		if (o instanceof Packets.GetId)
-			handleGetId((Packets.GetId) o);
+		if (o instanceof Packets.GetClientId)
+			handleGetClientId((Packets.GetClientId) o);
+		else if (o instanceof Packets.AddPlayer)
+			handleAddPlayer((Packets.AddPlayer) o);
 	}
 	
-	private void handleGetId(Packets.GetId packet) {
+	private void handleGetClientId(Packets.GetClientId packet) {
 		client.setId(packet.id);
+		client.sendAddPlayer();
 		
-		System.out.println(
-			"Received Packet: GetId\n" +
-			"id: " + packet.id
-		);
+		if (MainGame.DEBUGGING) {
+			System.out.println(
+				"Received Packet: GetClientId\n" +
+				"id: " + packet.id
+			);
+		}	
+	}
+	
+	private void handleAddPlayer(Packets.AddPlayer packet) {
+		Player newPlayer = new Player(packet.x, packet.y, packet.id);
+		client.game.players.add(newPlayer);
+		
+		if (packet.id == client.getId())
+			client.game.player = newPlayer;
+		
+		if (MainGame.DEBUGGING) {
+			System.out.println(
+				"Received Packet: AddPlayer\n" +
+				"x: " + packet.x + "\n" +
+				"y: " + packet.y + "\n" +
+				"id: " + packet.id + "\n"
+			);
+		}
 	}
 }

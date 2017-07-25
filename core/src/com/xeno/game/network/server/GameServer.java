@@ -1,6 +1,7 @@
 package com.xeno.game.network.server;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.mockito.Mockito;
 
@@ -13,11 +14,14 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.Server;
 import com.xeno.game.common.Network;
+import com.xeno.game.common.Player;
 import com.xeno.game.network.common.Packets;
 
 public class GameServer extends ApplicationAdapter {
 
 	private Server server;
+	
+	public ArrayList<Player> players;
 	
 	public GameServer() throws IOException {
 		this(Network.SERVER_TCP_PORT, Network.SERVER_UDP_PORT);
@@ -25,6 +29,8 @@ public class GameServer extends ApplicationAdapter {
 	
 	public GameServer(int tcpPort, int udpPort) throws IOException {
 		server = new Server();
+		
+		players = new ArrayList<Player>();
 		
 		register(server);
 		
@@ -36,11 +42,35 @@ public class GameServer extends ApplicationAdapter {
 	private void register(EndPoint endPoint) {
 		Kryo kyro = endPoint.getKryo();
 		
-		kyro.register(Packets.GetId.class);
+		kyro.register(Packets.GetClientId.class);
+		kyro.register(Packets.AddPlayer.class);
 	}
 	
-	public void sendGetId(Connection c, Packets.GetId packet) {
+	public void sendGetClientId(Connection c, Packets.GetClientId packet) {
 		server.sendToTCP(c.getID(), packet);
+	}
+	
+	public void sendAddPlayer(Connection c, Packets.AddPlayer packet) {
+		// Packet to contain existing player info
+		Packets.AddPlayer packetExisting = new Packets.AddPlayer();
+		
+		// Send information to everyone
+		for (Player p : players) {
+			if (p.getId() != c.getID()) {
+				// Send new player to existing players
+				server.sendToTCP(p.getId(), packet);
+				
+				// Send this existing player to new player
+				packetExisting.x = p.getX();
+				packetExisting.y = p.getY();
+				packetExisting.id = p.getId();
+
+				server.sendToTCP(c.getID(), packetExisting);
+			} else {
+				// Send new player to themselves
+				server.sendToTCP(c.getID(), packet);
+			}
+		}
 	}
 	
 	public void run() {

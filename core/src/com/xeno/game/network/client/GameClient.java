@@ -36,18 +36,23 @@ public class GameClient {
 	private void register(EndPoint endPoint) {
 		Kryo kyro = endPoint.getKryo();
 		
-		kyro.register(Packets.GetId.class);
+		kyro.register(Packets.GetClientId.class);
+		kyro.register(Packets.AddPlayer.class);
 	}
 	
 	public void run() throws IOException {
 		client.start();
 		client.addListener(new PacketHandler(this));
 		client.connect(5000, ipAddress, tcpPort, udpPort);
-		sendGetId();
+		sendGetClientId();
 	}
 	
-	public void sendGetId() {
-		client.sendTCP(new Packets.GetId());
+	public void sendGetClientId() {
+		client.sendTCP(new Packets.GetClientId());
+	}
+	
+	public void sendAddPlayer() {
+		client.sendTCP(new Packets.AddPlayer());
 	}
 	
 	public int getId() {
