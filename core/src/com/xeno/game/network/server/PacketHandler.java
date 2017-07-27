@@ -21,6 +21,8 @@ public class PacketHandler extends Listener {
 			handleGetClientId(c, (Packets.GetClientId) o);
 		else if (o instanceof Packets.AddPlayer)
 			handleAddPlayer(c, (Packets.AddPlayer) o);
+		else if (o instanceof Packets.RemovePlayer)
+			handleRemovePlayer(c, (Packets.RemovePlayer) o);
 	}
 	
 	private void handleGetClientId(Connection c, Packets.GetClientId packet) {
@@ -39,6 +41,17 @@ public class PacketHandler extends Listener {
 		server.sendAddPlayer(c, packet);
 		
 		System.out.println("Connection #" + packet.id + " connected!");
+	}
+	
+	private void handleRemovePlayer(Connection c, Packets.RemovePlayer packet) {
+		packet.id = c.getID();
+		
+		Player player = Player.getPlayerById(packet.id, server.players);
+		
+		server.players.remove(player);
+		server.sendRemovePlayer(c, packet);
+		
+		System.out.println("Connection #" + packet.id + " disconnected!");
 	}
 	
 	@Override

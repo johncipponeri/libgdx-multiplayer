@@ -73,6 +73,10 @@ public class GameServer extends ApplicationAdapter {
 		}
 	}
 	
+	public void sendRemovePlayer(Connection c, Packets.RemovePlayer packet) {
+		server.sendToAllExceptTCP(packet.id, packet);
+	}
+	
 	public void run() {
 		System.out.println("Server starting ...");
 		

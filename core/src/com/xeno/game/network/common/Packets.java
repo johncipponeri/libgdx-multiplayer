@@ -9,4 +9,8 @@ public class Packets {
 	public static class AddPlayer {
 		public int x, y, id;
 	}
+	
+	public static class RemovePlayer {
+		public int id;
+	}
 }

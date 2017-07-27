@@ -55,6 +55,10 @@ public class GameClient {
 		client.sendTCP(new Packets.AddPlayer());
 	}
 	
+	public void sendRemovePlayer() {
+		client.sendTCP(new Packets.RemovePlayer());
+	}
+	
 	public int getId() {
 		return id;
 	}

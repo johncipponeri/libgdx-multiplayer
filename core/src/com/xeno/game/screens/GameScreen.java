@@ -93,6 +93,8 @@ public class GameScreen extends ScreenAdapter {
 	
 	@Override
 	public void dispose() {
+		client.sendRemovePlayer();
+		
 		client = null;
 		players.clear();
 		players = null;

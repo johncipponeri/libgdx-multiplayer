@@ -22,6 +22,8 @@ public class PacketHandler extends Listener {
 			handleGetClientId((Packets.GetClientId) o);
 		else if (o instanceof Packets.AddPlayer)
 			handleAddPlayer((Packets.AddPlayer) o);
+		else if (o instanceof Packets.RemovePlayer)
+			handleRemovePlayer((Packets.RemovePlayer) o);
 	}
 	
 	private void handleGetClientId(Packets.GetClientId packet) {
@@ -48,6 +50,19 @@ public class PacketHandler extends Listener {
 				"Received Packet: AddPlayer\n" +
 				"x: " + packet.x + "\n" +
 				"y: " + packet.y + "\n" +
+				"id: " + packet.id + "\n"
+			);
+		}
+	}
+	
+	private void handleRemovePlayer(Packets.RemovePlayer packet) {
+		Player player = Player.getPlayerById(packet.id, client.game.players);
+		
+		client.game.players.remove(player);
+		
+		if (MainGame.DEBUGGING) {
+			System.out.println(
+				"Received Packet: RemovePlayer\n" +
 				"id: " + packet.id + "\n"
 			);
 		}
