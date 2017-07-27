@@ -34,10 +34,9 @@ public class GameClient {
 	}
 	
 	private void register(EndPoint endPoint) {
-		Kryo kyro = endPoint.getKryo();
+		Kryo kryo = endPoint.getKryo();
 		
-		kyro.register(Packets.GetClientId.class);
-		kyro.register(Packets.AddPlayer.class);
+		Packets.register(kryo);
 	}
 	
 	public void run() throws IOException {
