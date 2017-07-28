@@ -58,6 +58,14 @@ public class GameClient {
 		client.sendTCP(new Packets.RemovePlayer());
 	}
 	
+	public void sendMove(int direction, float distance) {
+		Packets.Move packet = new Packets.Move();
+		packet.direction = direction;
+		packet.distance = distance;
+		
+		client.sendUDP(packet);
+	}
+	
 	public int getId() {
 		return id;
 	}

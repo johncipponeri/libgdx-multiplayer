@@ -76,6 +76,10 @@ public class GameServer extends ApplicationAdapter {
 		server.sendToAllExceptTCP(packet.id, packet);
 	}
 	
+	public void sendMove(Connection c, Packets.Move packet) {
+		server.sendToAllUDP(packet);
+	}
+	
 	public void run() {
 		System.out.println("Server starting ...");
 		

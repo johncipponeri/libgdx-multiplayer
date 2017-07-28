@@ -23,6 +23,23 @@ public class Player {
 		bounds = new Rectangle(position.x, position.y, 32, 32);
 	}
 	
+	public void move(int direction, float distance) {
+		switch (direction) {
+		case Direction.NORTH:
+			position.y += distance;
+			break;
+		case Direction.SOUTH:
+			position.y -= distance;
+			break;
+		case Direction.EAST:
+			position.x += distance;
+			break;
+		case Direction.WEST:
+			position.x -= distance;
+			break;
+		}
+	}
+	
 	public void update(float delta) {
 		bounds.setPosition(position);
 	}

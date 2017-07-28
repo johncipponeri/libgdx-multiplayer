@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.xeno.game.GameMap;
 import com.xeno.game.MainGame;
+import com.xeno.game.common.Direction;
 import com.xeno.game.common.Player;
 import com.xeno.game.network.client.GameClient;
 
@@ -50,13 +51,13 @@ public class GameScreen extends ScreenAdapter {
 	
 	public void update(float delta) {
 		if (Gdx.input.isKeyPressed(Keys.LEFT))
-			player.setX((int) (player.getX() - 300 * delta));
+			client.sendMove(Direction.WEST, 300 * delta);
 		if (Gdx.input.isKeyPressed(Keys.RIGHT))
-			player.setX((int) (player.getX() + 300 * delta));
+			client.sendMove(Direction.EAST, 300 * delta);
 		if (Gdx.input.isKeyPressed(Keys.UP))
-			player.setY((int) (player.getY() + 300 * delta));
+			client.sendMove(Direction.NORTH, 300 * delta);
 		if (Gdx.input.isKeyPressed(Keys.DOWN))
-			player.setY((int) (player.getY() - 300 * delta));
+			client.sendMove(Direction.SOUTH, 300 * delta);
 		
 		camera.position.set(player.getX(), player.getY(), 0);
 		
