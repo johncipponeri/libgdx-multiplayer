@@ -46,8 +46,10 @@ public class PacketHandler extends Listener {
 		Player newPlayer = new Player(packet.x, packet.y, packet.id);
 		client.game.players.add(newPlayer);
 		
-		if (packet.id == client.getId())
+		if (packet.id == client.getId()) {
 			client.game.player = newPlayer;
+			client.game.player.SimulationDelay = 50;
+		}
 		
 		if (MainGame.DEBUGGING) {
 			System.out.println(

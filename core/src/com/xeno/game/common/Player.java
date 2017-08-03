@@ -15,7 +15,6 @@ import com.xeno.game.MainGame;
 import com.xeno.game.network.common.PlayerInputState;
 import com.xeno.game.network.common.PlayerState;
 import com.xeno.game.network.common.PlayerTimeline;
-import com.xeno.game.network.common.Timeline;
 import com.xeno.game.network.common.TimelineValue;
 import com.xeno.game.util.SystemTime;
 
@@ -29,6 +28,7 @@ public class Player {
 	public PlayerState CurrentState;
 	private PlayerTimeline Timeline;
 	private HashMap<Long, PlayerInputState> _queuedInput;
+	public long SimulationDelay;
 	//
 	
 	public boolean Ready()
@@ -46,6 +46,7 @@ public class Player {
 		CurrentState = new PlayerState();
 		Timeline = new PlayerTimeline();
 		_queuedInput = new HashMap<Long, PlayerInputState>();
+		SimulationDelay = 200;
 	}
 	
 	public void update(float delta) {
@@ -96,7 +97,7 @@ public class Player {
             return;
 
         //CurrentState = GetState(SystemTime.CurrentFrozenTimeMS() - SimulationDelay);
-        CurrentState = GetState(SystemTime.CurrentFrozenTimeMS() - 200);
+        CurrentState = GetState(SystemTime.CurrentFrozenTimeMS() - SimulationDelay);
     }
 	
 	public Vector2 GetPosition()
@@ -178,7 +179,7 @@ public class Player {
     {
         Timeline.ClearNonAuthoritive();
 
-        ArrayList<PlayerInputState> ordered = new ArrayList();
+        ArrayList<PlayerInputState> ordered = new ArrayList<PlayerInputState>();
         _queuedInput.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .forEachOrdered(x -> ordered.add(x.getValue()));
