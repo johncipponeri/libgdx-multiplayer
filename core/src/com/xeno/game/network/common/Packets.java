@@ -10,4 +10,12 @@ public class Packets {
 		public int x, y, id;
 	}
 	
+	public static class SendInput {
+		public PlayerInputState input;
+	}
+	
+	public static class InputConfirmation {
+		public long stateTime;
+		public PlayerState state;
+	}
 }

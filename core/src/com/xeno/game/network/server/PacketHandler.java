@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.xeno.game.common.Player;
 import com.xeno.game.network.common.Packets;
+import com.xeno.game.network.common.PlayerInputState;
 
 public class PacketHandler extends Listener {
 
@@ -21,6 +22,8 @@ public class PacketHandler extends Listener {
 			handleGetClientId(c, (Packets.GetClientId) o);
 		else if (o instanceof Packets.AddPlayer)
 			handleAddPlayer(c, (Packets.AddPlayer) o);
+		else if (o instanceof Packets.SendInput)
+			handleSendInput(c, (Packets.SendInput) o);
 	}
 	
 	private void handleGetClientId(Connection c, Packets.GetClientId packet) {
@@ -39,6 +42,24 @@ public class PacketHandler extends Listener {
 		server.sendAddPlayer(c, packet);
 		
 		System.out.println("Connection #" + packet.id + " connected!");
+	}
+	
+	private void handleSendInput(Connection c, Packets.SendInput packet) {
+		
+		Player player = Player.getPlayerById(c.getID(), server.players);
+		if (player == null)
+			return;
+		
+		PlayerInputState input = new PlayerInputState();
+		input = packet.input;
+		
+		player.UpdateState(input);
+		
+		server.SendInputConfirmation(c, input.Identifier, player);
+		System.out.println("Sent out!");
+		
+//      SendUpdateEntityToAll(player);
+		
 	}
 	
 	@Override

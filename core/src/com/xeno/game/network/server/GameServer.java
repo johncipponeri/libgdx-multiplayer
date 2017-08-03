@@ -16,6 +16,8 @@ import com.esotericsoftware.kryonet.Server;
 import com.xeno.game.common.Network;
 import com.xeno.game.common.Player;
 import com.xeno.game.network.common.Packets;
+import com.xeno.game.network.common.PlayerInputState;
+import com.xeno.game.network.common.PlayerState;
 
 public class GameServer extends ApplicationAdapter {
 
@@ -40,10 +42,14 @@ public class GameServer extends ApplicationAdapter {
 	}
 	
 	private void register(EndPoint endPoint) {
-		Kryo kyro = endPoint.getKryo();
+		Kryo kryo = endPoint.getKryo();
 		
-		kyro.register(Packets.GetClientId.class);
-		kyro.register(Packets.AddPlayer.class);
+		kryo.register(Packets.GetClientId.class);
+		kryo.register(Packets.AddPlayer.class);
+		kryo.register(Packets.SendInput.class);
+		kryo.register(PlayerInputState.class);
+		kryo.register(PlayerState.class);
+		kryo.register(Packets.InputConfirmation.class);
 	}
 	
 	public void sendGetClientId(Connection c, Packets.GetClientId packet) {
@@ -72,6 +78,16 @@ public class GameServer extends ApplicationAdapter {
 			}
 		}
 	}
+	
+	public void SendInputConfirmation(Connection c, long stateTime, Player player)
+    {
+        Packets.InputConfirmation packet = new Packets.InputConfirmation();
+       
+        packet.stateTime = stateTime;
+        packet.state = player.GetLatestState();
+
+        server.sendToTCP(c.getID(), packet);
+    }
 	
 	public void run() {
 		System.out.println("Server starting ...");

@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.xeno.game.MainGame;
 import com.xeno.game.common.Player;
 import com.xeno.game.network.common.Packets;
+import com.xeno.game.network.common.PlayerState;
 
 public class PacketHandler extends Listener {
 
@@ -22,6 +23,8 @@ public class PacketHandler extends Listener {
 			handleGetClientId((Packets.GetClientId) o);
 		else if (o instanceof Packets.AddPlayer)
 			handleAddPlayer((Packets.AddPlayer) o);
+		else if (o instanceof Packets.InputConfirmation)
+			handleInputConfirmation((Packets.InputConfirmation) o);
 	}
 	
 	private void handleGetClientId(Packets.GetClientId packet) {
@@ -51,5 +54,16 @@ public class PacketHandler extends Listener {
 				"id: " + packet.id + "\n"
 			);
 		}
+	}
+	
+	private void handleInputConfirmation(Packets.InputConfirmation packet) {
+		long time = packet.stateTime;
+
+		PlayerState state = new PlayerState();
+        state = packet.state;
+
+        client.game.player.SetState(time, state, true);
+
+        client.game.player.ValidateInput(time);
 	}
 }

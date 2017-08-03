@@ -7,6 +7,8 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.xeno.game.common.Network;
 import com.xeno.game.network.common.Packets;
+import com.xeno.game.network.common.PlayerInputState;
+import com.xeno.game.network.common.PlayerState;
 import com.xeno.game.screens.GameScreen;
 
 public class GameClient {
@@ -34,10 +36,14 @@ public class GameClient {
 	}
 	
 	private void register(EndPoint endPoint) {
-		Kryo kyro = endPoint.getKryo();
+		Kryo kryo = endPoint.getKryo();
 		
-		kyro.register(Packets.GetClientId.class);
-		kyro.register(Packets.AddPlayer.class);
+		kryo.register(Packets.GetClientId.class);
+		kryo.register(Packets.AddPlayer.class);
+		kryo.register(Packets.SendInput.class);
+		kryo.register(PlayerInputState.class);
+		kryo.register(PlayerState.class);
+		kryo.register(Packets.InputConfirmation.class);
 	}
 	
 	public void run() throws IOException {
@@ -53,6 +59,13 @@ public class GameClient {
 	
 	public void sendAddPlayer() {
 		client.sendTCP(new Packets.AddPlayer());
+	}
+	
+	public void sendInput(PlayerInputState input) {
+		Packets.SendInput packet = new Packets.SendInput();
+		
+		packet.input = input;
+		client.sendTCP(packet);
 	}
 	
 	public int getId() {

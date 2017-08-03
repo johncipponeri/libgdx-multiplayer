@@ -72,6 +72,7 @@ public class GameScreen extends ScreenAdapter {
         {
         	player.QueueInputPrediction(input);
     		player.UpdateState(input, SystemTime.CurrentFrozenTimeMS(), false, false);
+    		client.sendInput(input);
     		
             _updateTimer = 0;
         }
