@@ -18,4 +18,9 @@ public class Packets {
 		public long stateTime;
 		public PlayerState state;
 	}
+	
+	public static class UpdatePlayer {
+		public int id;
+		public PlayerState state;
+	}
 }

@@ -44,6 +44,7 @@ public class GameClient {
 		kryo.register(PlayerInputState.class);
 		kryo.register(PlayerState.class);
 		kryo.register(Packets.InputConfirmation.class);
+		kryo.register(Packets.UpdatePlayer.class);
 	}
 	
 	public void run() throws IOException {

@@ -31,6 +31,11 @@ public class Player {
 	private HashMap<Long, PlayerInputState> _queuedInput;
 	//
 	
+	public boolean Ready()
+    {
+        return Timeline.Ready();
+    }
+	
 	public Player(int x, int y, int id) {
 		this.id = id;
 		
@@ -91,7 +96,7 @@ public class Player {
             return;
 
         //CurrentState = GetState(SystemTime.CurrentFrozenTimeMS() - SimulationDelay);
-        CurrentState = GetState(SystemTime.CurrentFrozenTimeMS());
+        CurrentState = GetState(SystemTime.CurrentFrozenTimeMS() - 200);
     }
 	
 	public Vector2 GetPosition()

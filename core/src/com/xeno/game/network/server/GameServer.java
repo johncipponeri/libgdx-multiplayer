@@ -50,6 +50,7 @@ public class GameServer extends ApplicationAdapter {
 		kryo.register(PlayerInputState.class);
 		kryo.register(PlayerState.class);
 		kryo.register(Packets.InputConfirmation.class);
+		kryo.register(Packets.UpdatePlayer.class);
 	}
 	
 	public void sendGetClientId(Connection c, Packets.GetClientId packet) {
@@ -88,6 +89,29 @@ public class GameServer extends ApplicationAdapter {
 
         server.sendToTCP(c.getID(), packet);
     }
+	
+	public void sendUpdatePlayerToAll(Player player) {
+		for (Player p : players)
+		{
+		  	sendUpdatePlayer(p.getId(), player);
+		}
+	}
+	
+	public void sendUpdatePlayer(int id, Player player) {
+		if (!player.Ready())
+            return;
+
+        if (player.getId() == id)
+            return;
+
+        Packets.UpdatePlayer packet = new Packets.UpdatePlayer();
+        
+        packet.id = player.getId();
+        packet.state = player.GetLatestState();
+
+        server.sendToTCP(id, packet);
+	
+	}
 	
 	public void run() {
 		System.out.println("Server starting ...");

@@ -6,6 +6,7 @@ import com.xeno.game.MainGame;
 import com.xeno.game.common.Player;
 import com.xeno.game.network.common.Packets;
 import com.xeno.game.network.common.PlayerState;
+import com.xeno.game.util.SystemTime;
 
 public class PacketHandler extends Listener {
 
@@ -25,6 +26,8 @@ public class PacketHandler extends Listener {
 			handleAddPlayer((Packets.AddPlayer) o);
 		else if (o instanceof Packets.InputConfirmation)
 			handleInputConfirmation((Packets.InputConfirmation) o);
+		else if (o instanceof Packets.UpdatePlayer)
+			handleUpdatePlayer((Packets.UpdatePlayer) o);
 	}
 	
 	private void handleGetClientId(Packets.GetClientId packet) {
@@ -65,5 +68,22 @@ public class PacketHandler extends Listener {
         client.game.player.SetState(time, state, true);
 
         client.game.player.ValidateInput(time);
+	}
+	
+	private void handleUpdatePlayer(Packets.UpdatePlayer packet)
+	{
+		int id = packet.id;
+
+        Player player = Player.getPlayerById(id, client.game.players);
+
+        // TODO: Send request for creation?
+        if (player == null)
+            return;
+
+        PlayerState state = new PlayerState();
+        state = packet.state;
+        
+        player.SetState(SystemTime.CurrentFrozenTimeMS(), state, true);
+        System.out.println("I tried");
 	}
 }

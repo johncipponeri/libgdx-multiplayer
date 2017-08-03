@@ -58,7 +58,7 @@ public class PacketHandler extends Listener {
 		server.SendInputConfirmation(c, input.Identifier, player);
 		System.out.println("Sent out!");
 		
-//      SendUpdateEntityToAll(player);
+		server.sendUpdatePlayerToAll(player);
 		
 	}
 	

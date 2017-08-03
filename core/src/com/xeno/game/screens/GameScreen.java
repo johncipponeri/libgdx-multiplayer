@@ -63,21 +63,22 @@ public class GameScreen extends ScreenAdapter {
 	public void update(float delta) {
 		time.StartUpdate();
 		
-		PlayerInputState input = playerInput.Input();
-		
 		System.out.println(time.CurrentFrozenTimeMS());
 		
 		_updateTimer += delta;
         if ((_updateTimer % 1) * 1000 > 50)
         {
+        	PlayerInputState input = playerInput.Input();
+        	
         	player.QueueInputPrediction(input);
     		player.UpdateState(input, SystemTime.CurrentFrozenTimeMS(), false, false);
     		client.sendInput(input);
     		
             _updateTimer = 0;
         }
-
-		player.UpdateFrame(delta);
+        
+        for (Player p : players)
+        	p.UpdateFrame(delta);
 		
 		camera.position.set(player.GetPosition().x, player.GetPosition().y, 0);
 		
