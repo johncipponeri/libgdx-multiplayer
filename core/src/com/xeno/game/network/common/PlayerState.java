@@ -10,7 +10,7 @@ public class PlayerState {
         public boolean Moving;
 
         public PlayerState()
-        { }
+        {}
 
         public PlayerState(int direction, float x, float y)
         {

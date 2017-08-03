@@ -27,8 +27,7 @@ public class Player {
 	
 	// Timeline requirements
 	public PlayerState CurrentState;
-	private PlayerTimeline _timeline;
-	public PlayerTimeline Timeline;
+	private PlayerTimeline Timeline;
 	private HashMap<Long, PlayerInputState> _queuedInput;
 	//
 	
@@ -39,8 +38,9 @@ public class Player {
 		bounds = new Rectangle(position.x, position.y, 32, 32);
 		
 		// timeline stuff
-		_timeline = new PlayerTimeline();
-		Timeline = _timeline;
+		CurrentState = new PlayerState();
+		Timeline = new PlayerTimeline();
+		_queuedInput = new HashMap<Long, PlayerInputState>();
 	}
 	
 	public void update(float delta) {
@@ -54,7 +54,7 @@ public class Player {
 			renderer.setAutoShapeType(true);
 			
 			renderer.begin();
-			renderer.rect(position.x, position.y, bounds.width, bounds.height);
+			renderer.rect(CurrentState.X, CurrentState.Y, bounds.width, bounds.height);
 			renderer.end();
 		}
 	}
@@ -87,7 +87,7 @@ public class Player {
 	
 	public void UpdateFrame(float delta)
     {
-        if (!_timeline.Ready())
+        if (!Timeline.Ready())
             return;
 
         //CurrentState = GetState(SystemTime.CurrentFrozenTimeMS() - SimulationDelay);
@@ -157,7 +157,7 @@ public class Player {
 
     public void UpdateState(PlayerInputState input)
     {
-        UpdateState(input, SystemTime.CurrentFrozenTimeMS(), true, false);
+        UpdateState(input, SystemTime.CurrentFrozenTimeMS(), false, false);
     }
 
     public void QueueInputPrediction(PlayerInputState input)
@@ -166,6 +166,7 @@ public class Player {
             _queuedInput.remove((input.Identifier));
 
         _queuedInput.put(new Long(input.Identifier), input);
+        System.out.println("Put: " + input.Identifier + "; New total is " + _queuedInput.size());
     }
 
     public void ProcessQueuedInput()
@@ -225,6 +226,8 @@ public class Player {
 
         state.X += modifiedOffset.x;
         state.Y += modifiedOffset.y;
+        
+        System.out.println("X: " + state.X + ", Y: " + state.Y);
     }
 
     private Vector2 CheckCollision(PlayerState state, Vector2 offset)

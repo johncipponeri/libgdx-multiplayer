@@ -3,6 +3,7 @@ package com.xeno.game.network.client;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.xeno.game.network.common.PlayerInputState;
+import com.xeno.game.util.SystemTime;
 
 public class PlayerInput {
 	
@@ -13,6 +14,8 @@ public class PlayerInput {
 	public PlayerInputState Input() {	
 		
 		PlayerInputState _input = new PlayerInputState();
+		
+		_input.Identifier = SystemTime.CurrentFrozenTimeMS();
 		
 		_input.upPressed = Gdx.input.isKeyPressed(Keys.UP);
 		_input.rightPressed = Gdx.input.isKeyPressed(Keys.RIGHT);

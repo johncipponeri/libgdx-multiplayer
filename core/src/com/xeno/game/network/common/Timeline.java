@@ -1,6 +1,6 @@
 package com.xeno.game.network.common;
 
-import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class Timeline<TValueType> implements ITimeline<TValueType> {
 	
@@ -8,11 +8,18 @@ public abstract class Timeline<TValueType> implements ITimeline<TValueType> {
     private TimelineValue<TValueType> _firstValue;
     private TimelineValue<TValueType> _lastValue;
 
-    private Lock _lock;
+    private ReentrantLock _lock;
 
     private long _maxTimelineLength = 1000;
 
 
+    public Timeline()
+    {
+        _firstValue = null;
+        _lastValue = null;
+        _lock = new ReentrantLock();
+    }
+    
     public boolean Ready()
     {
         return _firstValue != null;

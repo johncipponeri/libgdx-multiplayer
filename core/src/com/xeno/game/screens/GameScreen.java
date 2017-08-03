@@ -59,16 +59,17 @@ public class GameScreen extends ScreenAdapter {
 	}
 	
 	public void update(float delta) {
-		// updateframe();
 		time.StartUpdate();
-		
 		System.out.println(time.CurrentFrozenTimeMS());
 		
 		//check ticks updatetick();
 		
 		PlayerInputState input = playerInput.Input();
 		
-		camera.position.set(player.getX(), player.getY(), 0);
+		player.QueueInputPrediction(input);
+		player.UpdateState(input);
+		
+		camera.position.set(player.GetPosition().x, player.GetPosition().y, 0);
 		
 		// Calculate once
 		float cameraHalfWidth = camera.viewportWidth / 2;
