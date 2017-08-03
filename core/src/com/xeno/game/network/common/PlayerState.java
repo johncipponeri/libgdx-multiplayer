@@ -2,34 +2,29 @@ package com.xeno.game.network.common;
 
 public class PlayerState {
 		
-        public Direction Direction;
+        public int Direction;
 
         public float X;
         public float Y;
 
         public boolean Moving;
-        public boolean Running;
-
-        public int Attack;
 
         public PlayerState()
         { }
 
-        public PlayerState(Direction direction, float x, float y)
+        public PlayerState(int direction, float x, float y)
         {
             Direction = direction;
             X = x;
             Y = y;
         }
 
-        public PlayerState(Direction direction, float x, float y, bool moving, bool running, int attack)
+        public PlayerState(int direction, float x, float y, boolean moving, boolean running, int attack)
         {
             Direction = direction;
             X = x;
             Y = y;
             Moving = moving;
-            Running = running;
-            Attack = attack;
         }
 
         public PlayerState(PlayerState copy)
@@ -38,8 +33,6 @@ public class PlayerState {
             X = copy.X;
             Y = copy.Y;
             Moving = copy.Moving;
-            Running = copy.Running;
-            Attack = copy.Attack;
         }
 
 //        public void WriteToPacket(NetOutgoingMessage msg)

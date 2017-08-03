@@ -7,7 +7,7 @@ public interface ITimeline<TValueType> {
 
         long getMaxTimelineLength(); // { get; set; }
         
-        long setMaxTimelineLength(long t);
+        void setMaxTimelineLength(long t);
 
         TValueType Get(long t);
 

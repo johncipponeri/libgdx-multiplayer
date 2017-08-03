@@ -5,7 +5,7 @@ import com.xeno.game.screens.GameScreen;
 
 public class MainGame extends Game {
 	
-	public static final boolean DEBUGGING = false;
+	public static final boolean DEBUGGING = true;
 	
 	@Override
 	public void create() {

@@ -13,6 +13,9 @@ import com.xeno.game.GameMap;
 import com.xeno.game.MainGame;
 import com.xeno.game.common.Player;
 import com.xeno.game.network.client.GameClient;
+import com.xeno.game.network.client.PlayerInput;
+import com.xeno.game.network.common.PlayerInputState;
+import com.xeno.game.util.SystemTime;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -28,6 +31,10 @@ public class GameScreen extends ScreenAdapter {
 	
 	private SpriteBatch batch;
 	
+	private PlayerInput playerInput;
+	
+	private SystemTime time;
+	
 	public GameScreen(MainGame game) {
 		this.game = game;
 		
@@ -40,6 +47,9 @@ public class GameScreen extends ScreenAdapter {
 		map = new GameMap("map.tmx", batch);
 		
 		players = new CopyOnWriteArrayList<Player>();
+		playerInput = new PlayerInput();
+		
+		time = new SystemTime();
 		
 		try {
 			client = new GameClient(this);
@@ -49,14 +59,14 @@ public class GameScreen extends ScreenAdapter {
 	}
 	
 	public void update(float delta) {
-		if (Gdx.input.isKeyPressed(Keys.LEFT))
-			player.setX((int) (player.getX() - 300 * delta));
-		if (Gdx.input.isKeyPressed(Keys.RIGHT))
-			player.setX((int) (player.getX() + 300 * delta));
-		if (Gdx.input.isKeyPressed(Keys.UP))
-			player.setY((int) (player.getY() + 300 * delta));
-		if (Gdx.input.isKeyPressed(Keys.DOWN))
-			player.setY((int) (player.getY() - 300 * delta));
+		// updateframe();
+		time.StartUpdate();
+		
+		System.out.println(time.CurrentFrozenTimeMS());
+		
+		//check ticks updatetick();
+		
+		PlayerInputState input = playerInput.Input();
 		
 		camera.position.set(player.getX(), player.getY(), 0);
 		
@@ -68,6 +78,8 @@ public class GameScreen extends ScreenAdapter {
 		camera.position.y = MathUtils.clamp(camera.position.y, cameraHalfHeight, map.getHeight() - cameraHalfHeight);
 		
 		camera.update();
+		
+		time.EndUpdate();
 	}
 	
 	@Override

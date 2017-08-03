@@ -1,37 +1,37 @@
 package com.xeno.game.network.common;
 
 public class PlayerTimeline extends Timeline<PlayerState>{
+	
+	public PlayerTimeline() {
+		super();
+	}
+	
+	// float currentTime, float startValue, float valueChange, float duration)
+	public static float LinearTween(float t, float b, float c, float d)
+    {
+        return c * t / d + b;
+    }
 
 	// LinearInterpolation(long t);
 	@Override
 	public PlayerState Interpolate(long t)
     {
-        var prev = ValueBefore(t);
-        var next = ValueAfter(t);
+		TimelineValue<PlayerState> prev = ValueBefore(t);
+        TimelineValue<PlayerState> next = ValueAfter(t);
 
-        var duration = next.Time - prev.Time;
-        var current = t - prev.Time;
+        long duration = next.Time - prev.Time;
+        long current = t - prev.Time;
 
-        var result = new PlayerState(prev.Val);
+        PlayerState result = new PlayerState(prev.Val);
 
-        var diffX = next.Val.X - prev.Val.X;
-        var newX = AnimationAlgorithms.Animate(AnimationType.Linear, current, prev.Val.X, diffX, duration);
+        float diffX = next.Val.X - prev.Val.X;
+        float newX = LinearTween(current, prev.Val.X, diffX, duration);
 
-        var diffY = next.Val.Y - prev.Val.Y;
-        var newY = AnimationAlgorithms.Animate(AnimationType.Linear, current, prev.Val.Y, diffY, duration);
+        float diffY = next.Val.Y - prev.Val.Y;
+        float newY = LinearTween(current, prev.Val.Y, diffY, duration);
 
         result.X = newX;
         result.Y = newY;
-
-        if (prev.Val.Attack > 0)
-        {
-            var attack = prev.Val.Attack + (int)current;
-
-            if (attack > 250)
-                attack = 0;
-
-            result.Attack = attack;
-        }
 
         return result;
     }
@@ -40,7 +40,7 @@ public class PlayerTimeline extends Timeline<PlayerState>{
 	@Override
     public PlayerState Extrapolate(long t)
     {
-        var prev = ValueBefore(t);
+        TimelineValue<PlayerState> prev = ValueBefore(t);
 
         return new PlayerState(prev.Val);
     }

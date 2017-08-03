@@ -9,4 +9,5 @@ public class Packets {
 	public static class AddPlayer {
 		public int x, y, id;
 	}
+	
 }
