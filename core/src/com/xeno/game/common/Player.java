@@ -157,7 +157,7 @@ public class Player {
 
     public void UpdateState(PlayerInputState input)
     {
-        UpdateState(input, SystemTime.CurrentFrozenTimeMS(), false, false);
+        UpdateState(input, SystemTime.CurrentFrozenTimeMS(), true, false);
     }
 
     public void QueueInputPrediction(PlayerInputState input)
@@ -210,7 +210,7 @@ public class Player {
         state.Moving = true;
 
         Vector2 offset = new Vector2(0, 0);
-        int velocity = 6;
+        int velocity = 5;
         
         if(input.leftPressed)
         	offset.x -= velocity;
@@ -218,9 +218,9 @@ public class Player {
         	offset.x += velocity;
         
         if(input.upPressed)
-        	offset.y -= velocity;
-        else if (input.downPressed)
         	offset.y += velocity;
+        else if (input.downPressed)
+        	offset.y -= velocity;
         
         Vector2 modifiedOffset = CheckCollision(state, offset);
 
