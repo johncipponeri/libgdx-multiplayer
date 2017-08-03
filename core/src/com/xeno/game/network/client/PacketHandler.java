@@ -44,6 +44,7 @@ public class PacketHandler extends Listener {
 	
 	private void handleAddPlayer(Packets.AddPlayer packet) {
 		Player newPlayer = new Player(packet.x, packet.y, packet.id);
+		newPlayer.SimulationDelay = 200;
 		client.game.players.add(newPlayer);
 		
 		if (packet.id == client.getId()) {

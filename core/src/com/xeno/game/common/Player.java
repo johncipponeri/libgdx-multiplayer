@@ -46,7 +46,7 @@ public class Player {
 		CurrentState = new PlayerState();
 		Timeline = new PlayerTimeline();
 		_queuedInput = new HashMap<Long, PlayerInputState>();
-		SimulationDelay = 200;
+		SimulationDelay = 50;
 	}
 	
 	public void update(float delta) {
@@ -216,7 +216,7 @@ public class Player {
         state.Moving = true;
 
         Vector2 offset = new Vector2(0, 0);
-        int velocity = 5;
+        int velocity = 6;
         
         if(input.leftPressed)
         	offset.x -= velocity;

@@ -56,10 +56,8 @@ public class PacketHandler extends Listener {
 		player.UpdateState(input);
 		
 		server.SendInputConfirmation(c, input.Identifier, player);
-		System.out.println("Sent out!");
-		
+				
 		server.sendUpdatePlayerToAll(player);
-		
 	}
 	
 	@Override
