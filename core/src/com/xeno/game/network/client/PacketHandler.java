@@ -28,6 +28,8 @@ public class PacketHandler extends Listener {
 			handleInputConfirmation((Packets.InputConfirmation) o);
 		else if (o instanceof Packets.UpdatePlayer)
 			handleUpdatePlayer((Packets.UpdatePlayer) o);
+		else if (o instanceof Packets.RemovePlayer)
+			handleRemovePlayer((Packets.RemovePlayer) o);
 	}
 	
 	private void handleGetClientId(Packets.GetClientId packet) {
@@ -87,5 +89,11 @@ public class PacketHandler extends Listener {
         state = packet.state;
         
         player.SetState(SystemTime.CurrentFrozenTimeMS(), state, true);
+	}
+	
+	private void handleRemovePlayer(Packets.RemovePlayer packet) {
+		Player p = Player.getPlayerById(packet.id, client.game.players);
+		
+		client.game.players.remove(p);
 	}
 }

@@ -45,6 +45,7 @@ public class GameClient {
 		kryo.register(PlayerState.class);
 		kryo.register(Packets.InputConfirmation.class);
 		kryo.register(Packets.UpdatePlayer.class);
+		kryo.register(Packets.RemovePlayer.class);
 	}
 	
 	public void run() throws IOException {
@@ -66,6 +67,13 @@ public class GameClient {
 		Packets.SendInput packet = new Packets.SendInput();
 		
 		packet.input = input;
+		client.sendTCP(packet);
+	}
+	
+	public void sendRemovePlayer()
+	{
+		Packets.RemovePlayer packet = new Packets.RemovePlayer();
+		
 		client.sendTCP(packet);
 	}
 	

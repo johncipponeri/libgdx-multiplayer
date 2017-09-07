@@ -51,6 +51,7 @@ public class GameServer extends ApplicationAdapter {
 		kryo.register(PlayerState.class);
 		kryo.register(Packets.InputConfirmation.class);
 		kryo.register(Packets.UpdatePlayer.class);
+		kryo.register(Packets.RemovePlayer.class);
 	}
 	
 	public void sendGetClientId(Connection c, Packets.GetClientId packet) {
@@ -111,6 +112,10 @@ public class GameServer extends ApplicationAdapter {
 
         server.sendToTCP(id, packet);
 	
+	}
+	
+	public void sendRemovePlayer(Connection c, Packets.RemovePlayer packet) {
+		server.sendToAllExceptTCP(c.getID(), packet);
 	}
 	
 	public void run() {

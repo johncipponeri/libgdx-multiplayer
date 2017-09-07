@@ -24,6 +24,8 @@ public class PacketHandler extends Listener {
 			handleAddPlayer(c, (Packets.AddPlayer) o);
 		else if (o instanceof Packets.SendInput)
 			handleSendInput(c, (Packets.SendInput) o);
+		else if (o instanceof Packets.RemovePlayer)
+			handleRemovePlayer(c, (Packets.RemovePlayer) o);
 	}
 	
 	private void handleGetClientId(Connection c, Packets.GetClientId packet) {
@@ -58,6 +60,16 @@ public class PacketHandler extends Listener {
 		server.SendInputConfirmation(c, input.Identifier, player);
 				
 		server.sendUpdatePlayerToAll(player);
+	}
+	
+	private void handleRemovePlayer(Connection c, Packets.RemovePlayer packet) {
+		
+		packet.id = c.getID();
+		
+		Player r = Player.getPlayerById(packet.id, server.players);
+		server.players.remove(r);
+		
+		server.sendRemovePlayer(c, packet);
 	}
 	
 	@Override

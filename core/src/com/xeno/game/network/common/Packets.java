@@ -23,4 +23,8 @@ public class Packets {
 		public int id;
 		public PlayerState state;
 	}
+	
+	public static class RemovePlayer {
+		public int id;
+	}
 }
