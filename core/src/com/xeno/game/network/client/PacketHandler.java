@@ -87,6 +87,5 @@ public class PacketHandler extends Listener {
         state = packet.state;
         
         player.SetState(SystemTime.CurrentFrozenTimeMS(), state, true);
-        System.out.println("I tried");
 	}
 }

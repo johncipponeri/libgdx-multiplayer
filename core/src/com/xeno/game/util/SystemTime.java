@@ -4,51 +4,53 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class SystemTime
 {
-    private static long _frozenTime;
-    private static int _freezeCounter;
+	private static long loadTime;
+    private static long frozenTime;
+    private static int freezeCounter;
 
-    private static long _currentUpdateTime;
-    private static long _prevUpdateTime;
+    private static long currentUpdateTime;
+    private static long prevUpdateTime;
 
-    private static ReentrantLock _freezeLock;
+    private static ReentrantLock freezeLock;
     
     public SystemTime()
     {
-    	_frozenTime = 0;
-    	_freezeCounter = 0;
-    	_prevUpdateTime = 0;
-    	_currentUpdateTime = 0;
-    	_freezeLock = new ReentrantLock();
+	    	loadTime = System.currentTimeMillis();
+	    	frozenTime = 0;
+	    	freezeCounter = 0;
+	    	prevUpdateTime = 0;
+	    	currentUpdateTime = 0;
+	    	freezeLock = new ReentrantLock();
     }
 
     public static void Freeze()
     {
-    	_freezeLock.lock();
-    	try {
-            if (_freezeCounter == 0)
-                _frozenTime = CurrentTimeMS();
-
-            _freezeCounter++;
-        } finally {
-        	_freezeLock.unlock();
-        }
+	    	freezeLock.lock();
+	    	try {
+	            if (freezeCounter == 0)
+	                frozenTime = CurrentTimeMS();
+	
+	            freezeCounter++;
+	        } finally {
+	        	freezeLock.unlock();
+	        }
     }
 
     public static void Defrost()
     {
-        _freezeLock.lock();
+        freezeLock.lock();
         try {
-            _freezeCounter--;
+            freezeCounter--;
         } finally {
-        	_freezeLock.unlock();
+        	freezeLock.unlock();
         }
     }
 
     public static void StartUpdate()
     {
         Freeze();
-        _prevUpdateTime = _currentUpdateTime;
-        _currentUpdateTime = CurrentTimeMS();
+        prevUpdateTime = currentUpdateTime;
+        currentUpdateTime = CurrentTimeMS();
     }
 
     public static void EndUpdate()
@@ -58,14 +60,14 @@ public class SystemTime
 
     public static long CurrentTimeMS()
     {
-        return (System.currentTimeMillis());
+        return (System.currentTimeMillis() - loadTime);
     }
 
     public static long CurrentFrozenTimeMS()
     {
-        if (_freezeCounter == 0)
+        if (freezeCounter == 0)
             return CurrentTimeMS();
 
-        return _frozenTime;
+        return frozenTime;
     }
 }
