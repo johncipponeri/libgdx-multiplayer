@@ -13,6 +13,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.Server;
+import com.xeno.game.common.Map;
 import com.xeno.game.common.Network;
 import com.xeno.game.common.Player;
 import com.xeno.game.network.common.Packets;
@@ -23,6 +24,7 @@ public class GameServer extends ApplicationAdapter {
 
 	private Server server;
 	
+	public ArrayList<Map> maps;
 	public ArrayList<Player> players;
 	
 	public GameServer() throws IOException {
@@ -32,6 +34,7 @@ public class GameServer extends ApplicationAdapter {
 	public GameServer(int tcpPort, int udpPort) throws IOException {
 		server = new Server();
 		
+		maps = new ArrayList<Map>();
 		players = new ArrayList<Player>();
 		
 		register(server);
@@ -118,11 +121,24 @@ public class GameServer extends ApplicationAdapter {
 		server.sendToAllExceptTCP(c.getID(), packet);
 	}
 	
+	private void loadMaps()
+	{
+		maps.add(new Map("Test Map!", "map.tmx"));
+		System.out.println("Added 'Test Map!'");
+	}
+	
 	public void run() {
 		System.out.println("Server starting ...");
 		
 		server.start();
 		
+		System.out.println("Loading Maps ...");
+		
+		loadMaps();
+		
+		System.out.println("Maps Loaded");
+		
+		// start server loop
 		System.out.println("Server started!");
 	}
 	

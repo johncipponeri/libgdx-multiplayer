@@ -23,8 +23,9 @@ public class Player {
 	public Vector2 position;
 	private Rectangle bounds;
 	private int id;
+	public int mapID;
 	
-	// Timeline requirements
+	// Timeline
 	public PlayerState CurrentState;
 	private PlayerTimeline Timeline;
 	private HashMap<Long, PlayerInputState> _queuedInput;
