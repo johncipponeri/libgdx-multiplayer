@@ -14,7 +14,7 @@ public class Map {
 	private int height;
 	public TiledMap tiledMap;
 	
-	public ArrayList<Player> players;
+	private ArrayList<Player> players;
 	
 	public Map() {
 		this("null", "map.tmx");
@@ -25,7 +25,53 @@ public class Map {
 		this.name = name;
 		width = tiledMap.getProperties().get("width", Integer.class);
 	    height = tiledMap.getProperties().get("height", Integer.class);
+	    
+	    players = new ArrayList<Player>();
 	}
 	
+	public boolean hasPlayer(Player p)
+	{
+		if (players.contains(p))
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean hasPlayer(int id)
+	{
+		for (Player p : players)
+		{
+			if (p.getId() == id)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public Player getPlayer(int id)
+	{
+		for (Player p : players)
+		{
+			if (p.getId() == id)
+				return p;
+		}
+		
+		System.out.println("Player ID "+ id + " does not exist");
+		
+		return null;
+	}
+	
+	public void addPlayer(Player p)
+	{
+		players.add(p);
+	}
+	
+	public void removePlayer(Player p)
+	{
+		if (players.contains(p))
+			players.remove(p);
+		else
+			System.out.println("No Player Exists on " + name);
+	}
 	
 }
