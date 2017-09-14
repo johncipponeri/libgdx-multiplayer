@@ -40,15 +40,17 @@ public class PacketHandler extends Listener {
 		packet.x = 5;
 		packet.y = 5;
 		
-		server.players.add(new Player(packet.x, packet.y, packet.id));
-		server.sendAddPlayer(c, packet);
+		Player p = new Player(packet.x, packet.y, packet.id);
+		
+		server.maps.get(p.getMapID()).addPlayer(p);
+		server.sendAddPlayer(c, p.getMapID(), packet);
 		
 		System.out.println("Connection #" + packet.id + " connected!");
 	}
 	
 	private void handleSendInput(Connection c, Packets.SendInput packet) {
 		
-		Player player = Player.getPlayerById(c.getID(), server.players);
+		Player player = Player.getPlayerById2(c.getID(), server.maps);
 		if (player == null)
 			return;
 		
@@ -59,15 +61,16 @@ public class PacketHandler extends Listener {
 		
 		server.SendInputConfirmation(c, input.Identifier, player);
 				
-		server.sendUpdatePlayerToAll(player);
+		server.sendUpdatePlayerToAll(player, player.getMapID());
 	}
 	
 	private void handleRemovePlayer(Connection c, Packets.RemovePlayer packet) {
 		
 		packet.id = c.getID();
 		
-		Player r = Player.getPlayerById(packet.id, server.players);
-		server.players.remove(r);
+		Player r = Player.getPlayerById2(packet.id, server.maps);
+		// server.players.remove(r);
+		server.maps.get(r.getMapID()).removePlayer(r);
 		
 		server.sendRemovePlayer(c, packet);
 	}

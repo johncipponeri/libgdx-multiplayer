@@ -23,7 +23,7 @@ public class Player {
 	public Vector2 position;
 	private Rectangle bounds;
 	private int id;
-	public int mapID;
+	private int mapID;
 	
 	// Timeline
 	public PlayerState CurrentState;
@@ -48,6 +48,7 @@ public class Player {
 		Timeline = new PlayerTimeline();
 		_queuedInput = new HashMap<Long, PlayerInputState>();
 		SimulationDelay = 50;
+		mapID = 0;
 	}
 	
 	public void update(float delta) {
@@ -74,6 +75,15 @@ public class Player {
 
 		    if (p.getId() == id)
 				return p;
+		}
+		
+		return null;
+	}
+	
+	public static Player getPlayerById2(int id, ArrayList<com.xeno.game.common.Map> maps) {
+		for (com.xeno.game.common.Map m : maps) {
+			if (m.hasPlayer(id))
+				return m.getPlayer(id);
 		}
 		
 		return null;
@@ -286,5 +296,13 @@ public class Player {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getMapID() {
+		return mapID;
+	}
+	
+	public void setMapID(int mapID) {
+		this.mapID = mapID;
 	}
 }

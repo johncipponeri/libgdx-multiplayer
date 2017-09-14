@@ -29,6 +29,11 @@ public class Map {
 	    players = new ArrayList<Player>();
 	}
 	
+	public ArrayList<Player> getPlayerArrayList() {
+		return players;
+		
+	}
+	
 	public boolean hasPlayer(Player p)
 	{
 		if (players.contains(p))

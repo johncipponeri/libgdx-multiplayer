@@ -61,12 +61,13 @@ public class GameServer extends ApplicationAdapter {
 		server.sendToTCP(c.getID(), packet);
 	}
 	
-	public void sendAddPlayer(Connection c, Packets.AddPlayer packet) {
+	public void sendAddPlayer(Connection c, int mapID, Packets.AddPlayer packet) {
+		// verify mapID
 		// Packet to contain existing player info
 		Packets.AddPlayer packetExisting = new Packets.AddPlayer();
 		
 		// Send information to everyone
-		for (Player p : players) {
+		for (Player p : maps.get(mapID).getPlayerArrayList()) {
 			if (p.getId() != c.getID()) {
 				// Send new player to existing players
 				server.sendToTCP(p.getId(), packet);
@@ -94,8 +95,8 @@ public class GameServer extends ApplicationAdapter {
         server.sendToTCP(c.getID(), packet);
     }
 	
-	public void sendUpdatePlayerToAll(Player player) {
-		for (Player p : players)
+	public void sendUpdatePlayerToAll(Player player, int mapID) {
+		for (Player p : maps.get(mapID).getPlayerArrayList())
 		{
 		  	sendUpdatePlayer(p.getId(), player);
 		}
