@@ -2,6 +2,7 @@ package com.xeno.game.network.server;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.mockito.Mockito;
 
@@ -25,7 +26,7 @@ public class GameServer extends ApplicationAdapter {
 	private Server server;
 	
 	public ArrayList<Map> maps;
-	public ArrayList<Player> players;
+	// public ArrayList<Player> players;
 	
 	public GameServer() throws IOException {
 		this(Network.SERVER_TCP_PORT, Network.SERVER_UDP_PORT);
@@ -35,7 +36,7 @@ public class GameServer extends ApplicationAdapter {
 		server = new Server();
 		
 		maps = new ArrayList<Map>();
-		players = new ArrayList<Player>();
+		// players = new ArrayList<Player>();
 		
 		register(server);
 		
@@ -141,6 +142,17 @@ public class GameServer extends ApplicationAdapter {
 		
 		// start server loop
 		System.out.println("Server started!");
+		
+		Scanner consoleInput = new Scanner(System.in);
+		ServerInputHandler commandHandler = new ServerInputHandler(this);
+		
+		while(true) {
+			String input = consoleInput.nextLine();
+	        
+			if (!input.isEmpty()) {
+	            commandHandler.handleInput(input);
+	        }
+		}
 	}
 	
 	public static void printIntro() {

@@ -107,7 +107,6 @@ public class Player {
         if (!Timeline.Ready())
             return;
 
-        //CurrentState = GetState(SystemTime.CurrentFrozenTimeMS() - SimulationDelay);
         CurrentState = GetState(SystemTime.CurrentFrozenTimeMS() - SimulationDelay);
     }
 	
@@ -230,14 +229,14 @@ public class Player {
         int velocity = 6;
         
         if(input.leftPressed)
-        	offset.x -= velocity;
+        		offset.x -= velocity;
         else if (input.rightPressed)
-        	offset.x += velocity;
+        		offset.x += velocity;
         
         if(input.upPressed)
-        	offset.y += velocity;
+        		offset.y += velocity;
         else if (input.downPressed)
-        	offset.y -= velocity;
+        		offset.y -= velocity;
         
         Vector2 modifiedOffset = CheckCollision(state, offset);
 
