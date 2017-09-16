@@ -31,6 +31,8 @@ public class PacketHandler extends Listener {
 	private void handleGetClientId(Connection c, Packets.GetClientId packet) {
 		packet.id = c.getID();
 		server.sendGetClientId(c, packet);
+		
+		System.out.println(c.getID() + " has connected");
 	}
 	
 	private void handleAddPlayer(Connection c, Packets.AddPlayer packet) {

@@ -63,13 +63,17 @@ public class GameServer extends ApplicationAdapter {
 	}
 	
 	public void sendAddPlayer(Connection c, int mapID, Packets.AddPlayer packet) {
+		sendAddPlayer(c.getID(), mapID, packet);
+	}
+	
+	public void sendAddPlayer(int cID, int mapID, Packets.AddPlayer packet) {
 		// verify mapID
 		// Packet to contain existing player info
 		Packets.AddPlayer packetExisting = new Packets.AddPlayer();
 		
 		// Send information to everyone
 		for (Player p : maps.get(mapID).getPlayerArrayList()) {
-			if (p.getId() != c.getID()) {
+			if (p.getId() != cID) {
 				// Send new player to existing players
 				server.sendToTCP(p.getId(), packet);
 				
@@ -78,10 +82,10 @@ public class GameServer extends ApplicationAdapter {
 				packetExisting.y = p.getY();
 				packetExisting.id = p.getId();
 
-				server.sendToTCP(c.getID(), packetExisting);
+				server.sendToTCP(cID, packetExisting);
 			} else {
 				// Send new player to themselves
-				server.sendToTCP(c.getID(), packet);
+				server.sendToTCP(cID, packet);
 			}
 		}
 	}
@@ -123,9 +127,17 @@ public class GameServer extends ApplicationAdapter {
 		server.sendToAllExceptTCP(c.getID(), packet);
 	}
 	
+	public void sendRemovePlayer(int id, int mapID, Packets.RemovePlayer packet) {
+		for (Player p : maps.get(mapID).getPlayerArrayList()) {
+			server.sendToTCP(id, packet);
+		}
+	}
+	
 	private void loadMaps()
 	{
 		maps.add(new Map("Test Map!", "map.tmx"));
+		System.out.println("Added 'Test Map!'");
+		maps.add(new Map("Test Map 2!", "map.tmx"));
 		System.out.println("Added 'Test Map!'");
 	}
 	

@@ -1,5 +1,8 @@
 package com.xeno.game.network.server;
 
+import com.xeno.game.common.Player;
+import com.xeno.game.network.common.Packets;
+
 public class ServerInputHandler {
 	
 	private GameServer server;
@@ -29,7 +32,7 @@ public class ServerInputHandler {
 	public void handleWarp(String[] input) {
 		
 		if (input.length == 1) {
-			System.out.println("/warp playername mapid");
+			System.out.println("Usage: /warp playername mapid");
 			return;
 		}
 		if (input.length != 3 && input.length != 1) {
@@ -44,7 +47,31 @@ public class ServerInputHandler {
 	}
 	
 	public void warp(String name, int mapID) {
-		System.out.println("Warping " + name + " to map #" + mapID);
+		Player p = Player.getPlayerById2(Integer.parseInt(name), server.maps);
+		
+		int oldMap = p.getMapID();
+		
+		Packets.RemovePlayer packet = new Packets.RemovePlayer();
+		packet.id = p.getId();
+		
+		server.maps.get(oldMap).removePlayer(p);
+		server.maps.get(mapID).addPlayer(p);
+		p.setMapID(mapID);
+		
+		for (Player r : server.maps.get(oldMap).getPlayerArrayList()) {
+			server.sendRemovePlayer(r.getId(), mapID, packet);
+		}
+		
+		Packets.AddPlayer pack = new Packets.AddPlayer();
+		pack.id = p.getId();
+		pack.x = p.getX();
+		pack.y = p.getY();
+		
+		for (Player pl : server.maps.get(mapID).getPlayerArrayList()) {
+			server.sendAddPlayer(pack.id, mapID, pack);
+		}
+		
+		System.out.println("Warped " + name + " to map #" + mapID);
 	}
 	
 	public boolean isParsable(String input){
